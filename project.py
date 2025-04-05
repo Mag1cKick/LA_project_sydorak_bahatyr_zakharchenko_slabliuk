@@ -160,8 +160,8 @@ for i in range(len(eigenvalues)):
     else:
         U[:, i] = 0
 
-k = 50
-U_reduced = U[:, :k]
+k = 50 #change for making human clearer
+U_reduced = U[:, :k] #eigrn space
 
 def classify_blob(blob, U_reduced, mean, threshold=0.3): #0.3 is just a test number, we will play with it
     blob_resized = cv2.resize(blob, (64, 64)).flatten().reshape(-1, 1)
@@ -171,6 +171,7 @@ def classify_blob(blob, U_reduced, mean, threshold=0.3): #0.3 is just a test num
     error = np.linalg.norm(blob_resized - x_recon) / np.linalg.norm(blob_resized)
     return error < threshold
 
+#getting blobs of moving objects from the video
 def extract_blobs(A_just_move, original_frames, min_area=100, patch_size=(64, 64)):
     blobs = []
     locations = []
@@ -197,6 +198,7 @@ def extract_blobs(A_just_move, original_frames, min_area=100, patch_size=(64, 64
 
 blobs, locations = extract_blobs(A_just_move, original_frames)
 
+#putting humans in boxes
 human_tracking = []
 for blob, (x, y, w, h, i) in zip(blobs, locations):
     if classify_blob(blob, U_reduced, mean):
